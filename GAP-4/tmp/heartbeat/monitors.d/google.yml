@@ -1,0 +1,8 @@
+- type: http
+  id: google-http
+  name: GOOGLE HTTP Monitor
+  schedule: '@every 30s' # every 5 seconds from start of beat
+  hosts: ["https://google.com"]
+  ipv4: true
+  ipv6: true
+  mode: any
