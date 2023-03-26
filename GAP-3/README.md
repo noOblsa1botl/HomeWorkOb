@@ -1,15 +1,15 @@
-Check index from GUI opensearch dashboards:
+Проверка индекса на дашборде:
 
-![image](https://user-images.githubusercontent.com/44001733/208620548-4ecfaf93-0b78-4529-b525-343e6953367e.png)
+![image](https://github.com/noOblsa1botl/HomeWorkOb/blob/main/GAP-3/208620548-4ecfaf93-0b78-4529-b525-343e6953367e.png)
 
-All usaged configs [located there](./tmp/)
+Все конфиги  [Находятся тут](./tmp/)
 
-For getting `sshd` logs, add line `SyslogFacility local3` to `/etc/ssh/sshd_config` 
+Для получения журналов sshd добавьте строку Syslog Facility local3 в `/etc/ssh/sshd_config` 
 
-`rsyslog`'s [configs](./tmp/rsyslog.d/)
+`rsyslog`'s [Конфиг](./tmp/rsyslog.d/)
 
-`logstash`'s [configs](./tmp/logstash/)
+`logstash`'s [Конфиг](./tmp/logstash/)
 
-Simple logs visualization:
+Простой лог виртуализации:
 
-![image](https://user-images.githubusercontent.com/44001733/208622578-f20eeebc-1a82-4804-beb6-9af93280276e.png)
+![image](https://github.com/noOblsa1botl/HomeWorkOb/blob/main/GAP-3/208622578-f20eeebc-1a82-4804-beb6-9af93280276e.png)
