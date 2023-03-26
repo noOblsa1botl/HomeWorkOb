@@ -1,0 +1,3 @@
+- pipeline.id: otus
+  queue.type: persisted
+  path.config: "/opt/logstash/config/nginx.conf"
