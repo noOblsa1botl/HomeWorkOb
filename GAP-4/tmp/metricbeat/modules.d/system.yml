@@ -1,0 +1,5 @@
+- module: system
+  period: 30s
+  metricsets:
+    - cpu
+    - memory
