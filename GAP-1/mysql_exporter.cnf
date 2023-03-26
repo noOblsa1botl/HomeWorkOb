@@ -1,0 +1,3 @@
+[client]
+user = exporter
+password=$MYSQLD_EXPORTER_PASSWORD
