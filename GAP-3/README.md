@@ -1,6 +1,6 @@
 Проверка индекса на дашборде:
 
-![image]()
+![image](https://github.com/noOblsa1botl/HomeWorkOb/blob/main/GAP-3/208620548-4ecfaf93-0b78-4529-b525-343e69533111.png)
 
 Все конфиги  [Находятся тут](./tmp/)
 
