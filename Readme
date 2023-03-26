@@ -13,25 +13,25 @@ Install nginx, php-fpm, mysql:
 sudo apt install -y nginx mysql-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
 ```
 
-Prepare MySQL for wordpress:
+Подготовка MySQL и Wordpress:
 ```bash
-# ubuntu20.04 root issue
+# ubuntu21.04 root issue
 sudo mysql -u root -p
 
 sudo mysql_secure_installation
 sudo mysql
 ```
 
-Create database, user, and grant priveleges:
+Создание базы данных, пользователя, и выдача прав:
 ```sql
 CREATE DATABASE wp DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE USER 'wpuser'@'localhost' IDENTIFIED BY 'password';
+CREATE USER 'wpuser'@'localhost' IDENTIFIED BY 'passwD';
 GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
 
-Prepare nginx config file:
+Подготовка конфигурационного файла nginx:
 ```nginx
 server {
   listen 443 ssl;
@@ -39,7 +39,7 @@ server {
   include snippets/self-signed.conf;
   include snippets/ssl-params.conf;
 
-  server_name 192.168.0.200;
+  server_name 10.10.10.100;
   root /var/www/wp;
 
   index index.php;
@@ -69,13 +69,13 @@ server {
 
 server {
   listen 80;
-  server_name 192.168.0.200;
+  server_name 10.10.10.100;
   access_log off;
   return 301 https://$server_name$request_uri;
 }
 ```
 
-Download Wordpress and configure them:
+Загрузка и конфигурация Wordpress:
 ```bah
 curl -LO https://wordpress.org/latest.tar.gz
 tar zxvf latest.tar.gz 
@@ -88,7 +88,7 @@ curl -s https://api.wordpress.org/secret-key/1.1/salt/
 sudo vim /var/www/wp/wp-config.php
 ```
 
-Restart services:
+Перезапуск сервисов:
 ```bash
 sudo systemctl reload nginx
 sudo systemctl restart php7.4-fpm
@@ -97,7 +97,7 @@ sudo systemctl restart php7.4-fpm
 
 На этой же виртуальной машине установите Prometheus exporters для сбора метрик со всех компонентов системы (начиная с VM и заканчивая DB, не забудьте про blackbox exporter который будет проверять доступность вашей CMS)
 
-Next, I download three exporters blackbox, node and mysql:
+Загружаем эскпортёров blackbox,node и mysql:
 ```bash
 # create user for running services
 sudo useradd -m exporters
@@ -112,13 +112,13 @@ wget https://github.com/prometheus/blackbox_exporter/releases/download/v0.22.0/b
 tar zxf *.tar.gz
 
 # create env variable with mysql password
-MYSQLD_EXPORTER_PASSWORD=password
+MYSQLD_EXPORTER_PASSWORD=passwD
 ```
 
-Create service user for mysql and grant previliges:
+Создаём пользователя для mysql и выдаём права:
 
 ```mysql
-CREATE USER 'exporter'@'localhost' IDENTIFIED BY 'password' WITH MAX_USER_CONNECTIONS 3;
+CREATE USER 'exporter'@'localhost' IDENTIFIED BY 'passwD' WITH MAX_USER_CONNECTIONS 3;
 GRANT PROCESS, REPLICATION CLIENT, SELECT ON \*.\* TO 'exporter'@'localhost';
 ```
 
@@ -126,7 +126,7 @@ Configs for blackbox and mysql [there](GAP-1/). Then create a services for each 
 
 На этой же или дополнительной виртуальной машине установите Prometheus задачей которого будет раз в 5 секунд собирать метрики с экспортеров
 
-Install Prometheus:
+Установка Prometheus:
 
 ```bash
 wget https://github.com/prometheus/prometheus/releases/download/v2.40.2/prometheus-2.40.2.linux-amd64.tar.gz
@@ -135,11 +135,11 @@ cd prometheus-2.40.2.linux-amd64/
 cp prometheus /usr/local/bin/
 sudo cp prometheus /usr/local/bin/
 ```
-Then I use this [config](GAP-1/prometheus.yml) and create service for running in background
+Затем я использую этот [config](GAP-1/prometheus.yml) и создаю службу для запуска в фоновом режиме
 
 На этой же или дополнительной виртуальной машине установите Alertmanager и сконфигурируйте его таким образом чтобы в случае недоступности какого либо компонента был отправлен alert с важность Critical в один из канал оповещений (канал оповещений на выбор: slack or telegram)
 
-Install Alertmanager and [configure](GAP-1/alertmanager.yml) them:
+Устанавливаю Alertmanager [configure](GAP-1/alertmanager.yml) 
 ```bash
 wget https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz
 tar zxf alertmanager-0.24.0.linux-amd64.tar.gz
@@ -148,15 +148,4 @@ sudo useradd alertmanager
 sudo cp alertmanager /usr/local/bin/
 sudo chown alertmanager: /usr/local/bin/alertmanage
 ```
-Then creating service for background job
-
----
-
-In the second task I need to implement Grafana monitoring.
-
-For this task I use Docker to run Grafana:
-```bash
-docker run -d -p 3000:3000 --name grafana grafana/grafana-oss
-```
-
-Next, I go to Grafana Labs to get dashboards for my exporters. All screenshots [there](GAP-2/)
+Затем создаём службу background job
